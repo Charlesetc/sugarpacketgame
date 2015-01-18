@@ -23,8 +23,10 @@ class Vertex:
 		self.children = self.get_children()
 		self.children_vertices = []
 		for child in self.children:
-			self.children_vertices.append(Vertex(child, self.tree))
-			self.tree.already_included.append(child)
+			if not(child in self.tree.alread_included):
+				self.children_vertices.append(Vertex(child, self.tree))
+			else:
+				#search for this child and include it in children_vertices without initializing
 		
 		# find children's win state
 		if self.player == BitArray('0b0'):
@@ -132,8 +134,9 @@ class Vertex:
 								legal_move = next_player + BitArray('0b00') + move_noflip
 
 							if not(legal_move in self.tree.already_included):
-								legal_moves.append(legal_move)
 								self.tree.already_included.append(legal_move)
+
+							legal_moves.append(legal_move)
 
 		return legal_moves
 # Transposes bitarrays that represent a grid of 4x4 two-bit cells.
