@@ -98,10 +98,6 @@ class Vertex:
 	
 
 
-
-if __name__ == "__main__":
-	print "Hello world!"
-
 # Transposes bitarrays that represent a grid of 4x4 two-bit cells.
 def transpose(old_array):
 	new_array = BitArray('0b00000000000000000000000000000000')
@@ -111,3 +107,7 @@ def transpose(old_array):
 			m = (i * 4 + j) * 2
 			new_array[(n):(n+2)] = old_array[(m):(m+2)]
 	return new_array
+
+if __name__ == "__main__":
+	print "Hello world!"
+	initial_state = BitArray("0b0000100000010000110000010010010000001") # i think..
