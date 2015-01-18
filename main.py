@@ -99,11 +99,27 @@ class Vertex:
 		own_piece = piece_dict[self.player]
 		legal_states = []
 		empties = [BitArray('0b00'), BitArray('0b0000'), BitArray('0b000000')]
+		both_ways = [self.board, transpose(self.board)]
 
-		for i in range(4):
-			row = self.board[(8*i):(8*(i+1))]
-			for j in range(4):
-				if row[(2*j):(2*(j+1))] == own_piece:
+		for way in both_ways:
+			for i in range(4):
+				row = way[(8*i):(8*(i+1))]
+				for j in range(4):
+					if row[(2*j):(2*(j+1))] == own_piece:
+						for k in range(3): #going to the right
+							try:
+								test = row[(2*(j+1)):(2*(j+1+k))]
+							except IndexError:
+								pass
+							else:
+								if row[(2*(j+1)):(2*(j+1+k))] in empties:
+									
+						for k in range(3): #going to the left
+							try:
+
+							except IndexError:
+								pass
+							else:
 
 
 		return BitArray('0b')
