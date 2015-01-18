@@ -2,34 +2,48 @@
 from bitstring import *
 
 class Vertex:
-	data = BitArray('0b00000000000000000000000000000000000')
-	# Formula: 1b Parity, 2b Win-State, 32b Board
 	
-	def __init__(self):
+	def __init__(data=BitArray('0b00000000000000000000000000000000000')):
+		# Formula: 1b Parity, 2b Win-State, 32b Board
+		
 		# setup board and player
-		self.board = self.data[4:]
 		self.player = self.data[0]
+		self.color = self.data[1:3]
+		self.board = self.data[3:]
 		
+		# deal with terminal condition
 		if self.is_winning_state():
-			if self.data[0]:
-				self.data[1:3] = BitArray('0b10')
+			if self.player:
+				self.color = BitArray('0b10')
 			else:
-				self.data[1:3] = BitArray('0b01')
+				self.color = BitArray('0b01')
 			return
-
-		# setup children
+		
+		# initialize children
 		self.children = self.get_children()
-
-
-		# do something
-		
-		# assuming we have list of children done
-		
-		self.color = ByteArray('0b0')
+		self.children_vertices = []
 		for child in self.children:
-			self.color = self.color[0] or child.data[self.player+1]
-		self.data[self.player+1] = self.color
-		self.data[(self.player+1)%2+1] = (self.color+1)%2
+			self.children_vertices.append(Vertex(child))
+		
+		# find children's win state
+		if self.player == BitArray('0b0'):
+			self.child_color_index = 0
+			self.child_other_index = 1
+		else:
+			self.child_color_index = 1
+			self.child_other_index = 0
+		
+		# find self's win state
+		self.win_state = False
+		
+		for child in self.children_vertices:
+			self.win_state = self.win_state or child.color[self.child_color_index]
+		if self.win_state:
+			self.color[self.child_color_index] = True
+			self.color[self.child_other_index] = False
+		else:
+			self.color[self.child_color_index] = False
+			self.color[self.child_other_index] = True
 	
 	def is_winning_state(self):
 		self 
@@ -61,7 +75,6 @@ class Vertex:
 			if self.chunk in self.square_patterns:
 				return True
 		
-		
 	
 	def __eq__(self, other):
 		return self.data == other.data
@@ -75,6 +88,11 @@ class Vertex:
 	def player(self):
 		return self.data[0]
 	
+	def get_children(self):
+		# returns the strings of all of the available child game states
+		return BitArray('0b')
+	
+
 
 
 if __name__ == "__main__":
