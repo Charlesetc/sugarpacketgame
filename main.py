@@ -106,20 +106,15 @@ class Vertex:
 				row = way[(8*i):(8*(i+1))]
 				for j in range(4):
 					if row[(2*j):(2*(j+1))] == own_piece:
-						for k in range(3): #going to the right
-							try:
-								test = row[(2*(j+1)):(2*(j+1+k))]
-							except IndexError:
-								pass
-							else:
-								if row[(2*(j+1)):(2*(j+1+k))] in empties:
-									
-						for k in range(3): #going to the left
-							try:
+						blanks_right = 0
+						blanks_left = 0
+						for k in range(3-j): #going to the right
+							if row[(2*(j+1)):(2*(j+1+k))] in empties:
+								blanks_right = k+1
 
-							except IndexError:
-								pass
-							else:
+						for k in range(j): #going to the left
+							if row[(2*(j-k)):(2*j)] in empties:
+								blanks_right = k+1
 
 
 		return BitArray('0b')
