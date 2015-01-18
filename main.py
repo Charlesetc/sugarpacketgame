@@ -10,6 +10,8 @@ class Vertex:
 		self.player = self.data[0]
 		self.color = self.data[1:3]
 		self.board = self.data[3:]
+
+		self.tree.already_included_dict[self.data] = self
 		
 		# deal with terminal condition
 		if self.is_terminal_state():
@@ -23,7 +25,7 @@ class Vertex:
 		self.children = self.get_children()
 		self.children_vertices = []
 		for child in self.children:
-			if not(child in self.tree.alread_included):
+			if not(child in self.tree.already_included):
 				self.children_vertices.append(Vertex(child, self.tree))
 				self.tree.already_included.append(child)
 			else:
@@ -159,6 +161,7 @@ def horizontal_flip(old_array):
 class Tree:
 	def __init__(self, initial_state):
 		self.already_included = [self.initial_state]
+		self.already_included_dict = {}
 		self.root =  Vertex(initial_state, self)
 
 if __name__ == "__main__":
