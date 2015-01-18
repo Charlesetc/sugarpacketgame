@@ -100,7 +100,7 @@ class Vertex:
 		next_player = self.player and True
 		legal_moves = []
 		empties = [BitArray('0b00'), BitArray('0b0000'), BitArray('0b000000')]
-		both_ways = [self.board, transpose(self.board)]
+		both_ways = [self.board, transpose(self.board), horizontal_flip(self.board), horizontal_flip(transpose(self.board))]
 
 		for way in both_ways: #could also do this over original, transpose, and horizontal flip of each to get rid of need for left/right
 			for i in range(4):
@@ -109,17 +109,10 @@ class Vertex:
 					if row[(2*j):(2*(j+1))] == own_piece:
 
 						blanks_right = 0
-						blanks_left = 0
-
 						right_move = None
-						left_move = None
 
 						for k in range(4-j): #going to the right
 							if row[(2*(j+1)):(2*(j+1+k))] in empties:
-								blanks_right = k+1
-
-						for k in range(j): #going to the left
-							if row[(2*(j-k)):(2*j)] in empties:
 								blanks_right = k+1
 
 						if blanks_right != 0:
@@ -131,6 +124,10 @@ class Vertex:
 
 							if way == transpose(self.board):
 								legal_move = next_player + BitArray('0b00') + transpose(move_noflip)
+							elif way == horizontal_flip(self.board):
+								legal_move = next_player + BitArray('0b00') + horizontal_flip(move_noflip)
+							elif way == horizontal_flip(transpose(self.board)):
+								legal_move = next_player + BitArray('0b00') + transpose(horizontal_flip(move_noflip))
 							else:
 								legal_move = next_player + BitArray('0b00') + move_noflip
 
@@ -149,6 +146,15 @@ def transpose(old_array):
 		for j in range(4):	
 			n = (j * 4 + i) * 2
 			m = (i * 4 + j) * 2
+			new_array[(n):(n+2)] = old_array[(m):(m+2)]
+	return new_array
+
+def horizontal_flip(old_array):
+	new_array = BitArray('0b00000000000000000000000000000000')
+	for i in range(4):
+		for j in range(4):
+			n = (j * 4 + i) * 2
+			m = (j * 4 - i) * 2
 			new_array[(n):(n+2)] = old_array[(m):(m+2)]
 	return new_array
 
