@@ -100,7 +100,7 @@ class Vertex:
 		legal_states = []
 
 		for i in range(4):
-			
+
 
 		return BitArray('0b')
 # Transposes bitarrays that represent a grid of 4x4 two-bit cells.
@@ -115,8 +115,8 @@ def transpose(old_array):
 
 class Tree:
 	def __init__(self, initial_state):
-		already_included = []
-		root = Vertex(initial_state, self)
+		self.already_included = []
+		self.root = Vertex(initial_state, self)
 
 if __name__ == "__main__":
 	print "Hello world!"
