@@ -100,9 +100,9 @@ class Vertex:
 		next_player = self.player and True
 		legal_moves = []
 		empties = [BitArray('0b00'), BitArray('0b0000'), BitArray('0b000000')]
-		both_ways = [self.board, transpose(self.board), horizontal_flip(self.board), horizontal_flip(transpose(self.board))]
+		four_ways = [self.board, transpose(self.board), horizontal_flip(self.board), horizontal_flip(transpose(self.board))]
 
-		for way in both_ways: #could also do this over original, transpose, and horizontal flip of each to get rid of need for left/right
+		for way in four_ways:
 			for i in range(4):
 				row = way[(8*i):(8*(i+1))]
 				for j in range(4):
@@ -136,9 +136,6 @@ class Vertex:
 								self.tree.already_included.append(legal_move)
 
 		return legal_moves
-
-
-		return BitArray('0b')
 # Transposes bitarrays that represent a grid of 4x4 two-bit cells.
 def transpose(old_array):
 	new_array = BitArray('0b00000000000000000000000000000000')
@@ -154,7 +151,7 @@ def horizontal_flip(old_array):
 	for i in range(4):
 		for j in range(4):
 			n = (j * 4 + i) * 2
-			m = (j * 4 - i) * 2
+			m = (j * 4 + 4-i) * 2
 			new_array[(n):(n+2)] = old_array[(m):(m+2)]
 	return new_array
 
