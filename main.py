@@ -12,7 +12,7 @@ class Vertex:
 		self.board = self.data[3:]
 		
 		# deal with terminal condition
-		if self.is_winning_state():
+		if self.is_terminal_state():
 			if self.player:
 				self.color = BitArray('0b10')
 			else:
@@ -45,20 +45,21 @@ class Vertex:
 			self.color[self.child_color_index] = False
 			self.color[self.child_other_index] = True
 	
-	def is_winning_state(self):
-		self 
+	def is_terminal_state(self):
+		
 		# check lines
 		
 		# check corners
-		self.corners = []
+		self.corners = [3, 35]
 		self.value = -1
 		for corner in self.corners:
 			if self.value == -1:
 				self.value = self.data[corner:corner+2]
 			elif self.value == self.data[corner:corner+2]:
-				pass	
+				continue
+		return True	
 		
-		# check sqaures
+		# check squares
 		self.square_starts = [3, 5, 7, 11, 13, 15, 19, 21, 23]
 		self.square_patterns = [
 								BitArray('0b010100000101'),
@@ -70,10 +71,14 @@ class Vertex:
 								BitArray('0b101001011010'),
 								BitArray('0b101000011010')
 								]
+		
 		for bit in self.square_starts:
 			self.chunk = self.data[bit:bit+12]
 			if self.chunk in self.square_patterns:
 				return True
+		
+		# otherwise is not a win
+		return False
 		
 	
 	def __eq__(self, other):
