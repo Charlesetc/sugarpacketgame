@@ -50,14 +50,15 @@ class Vertex:
 		# check lines
 		
 		# check corners
-		self.corners = [3, 35]
-		self.value = -1
-		for corner in self.corners:
-			if self.value == -1:
-				self.value = self.data[corner:corner+2]
-			elif self.value == self.data[corner:corner+2]:
-				continue
-		return True	
+		self.luc = self.data[3:5]
+		self.ruc = self.data[9:11]
+		self.llc = self.data[27:29]
+		self.rlc = self.data[33:35]
+		if not self.luc == BitArray("0b00")
+				self.luc == self.ruc and
+				self.luc == self.llc and
+				self.luc == self.rlc:
+			return True
 		
 		# check squares
 		self.square_starts = [3, 5, 7, 11, 13, 15, 19, 21, 23]
@@ -77,7 +78,7 @@ class Vertex:
 			if self.chunk in self.square_patterns:
 				return True
 		
-		# otherwise is not a win
+		# otherwise is not a terminal state
 		return False
 		
 	
@@ -88,10 +89,8 @@ class Vertex:
 		return not self.data == other.data
 	
 	def __str__(self):
-		return self.data
+		return str(self.data)
 	
-	def player(self):
-		return self.data[0]
 	
 	def get_children(self):
 		# returns the strings of all of the available child game states
