@@ -97,24 +97,48 @@ class Vertex:
 		# returns the strings of all of the available child game states
 		piece_dict = {BitArray('0b0'):BitArray('0b01'), BitArray('0b1'):BitArray('0b10')}
 		own_piece = piece_dict[self.player]
-		legal_states = []
+		next_player = self.player and True
+		legal_moves = []
 		empties = [BitArray('0b00'), BitArray('0b0000'), BitArray('0b000000')]
 		both_ways = [self.board, transpose(self.board)]
 
-		for way in both_ways:
+		for way in both_ways: #could also do this over original, transpose, and horizontal flip of each to get rid of need for left/right
 			for i in range(4):
 				row = way[(8*i):(8*(i+1))]
 				for j in range(4):
 					if row[(2*j):(2*(j+1))] == own_piece:
+
 						blanks_right = 0
 						blanks_left = 0
-						for k in range(3-j): #going to the right
+
+						right_move = None
+						left_move = None
+
+						for k in range(4-j): #going to the right
 							if row[(2*(j+1)):(2*(j+1+k))] in empties:
 								blanks_right = k+1
 
 						for k in range(j): #going to the left
 							if row[(2*(j-k)):(2*j)] in empties:
 								blanks_right = k+1
+
+						if blanks_right != 0:
+							sub_move_in_row = BitArray('0b00')*blanks_right + own_piece
+							move_in_row = row
+							move_in_row[(2*j):(2*blanks_right)] = sub_move_in_row
+							move_noflip = way
+							move_noflip[(8*i):(8*(i+1))] = move_in_row
+
+							if way == transpose(self.board):
+								legal_move = next_player + BitArray('0b00') + transpose(move_noflip)
+							else:
+								legal_move = next_player + BitArray('0b00') + move_noflip
+
+							if not(legal_move in self.tree.already_included):
+								legal_moves.append(legal_move)
+								self.tree.already_included.append(legal_move)
+
+		return legal_moves
 
 
 		return BitArray('0b')
