@@ -1,10 +1,11 @@
 # The Main Model of the Sugar Packet Game.
 
 class Vertex:
-	self.data = "0b00000000000000000000000000000000000"
-	# Formula: 1b Parity, 2b Win-State, 32b Board
 	
 	def __init__(self):
+		self.data = "0b00000000000000000000000000000000000"
+		# Formula: 1b Parity, 2b Win-State, 32b Board
+		
 		# setup board and player
 		self.board = self.data[4:]
 		self.player = self.data[0]
@@ -24,13 +25,18 @@ class Vertex:
 		
 		# assuming we have list of children done
 		
+		if self.player == "0b0":
+			
+		else:
+			
+		
 		self.color = "0b0"
 		for child in self.children:
 			self.color = self.color[0] or child.data[self.player+1]
 		self.data[self.player+1] = self.color
 	
 	def is_winning_state(self):
-		self 
+		self.is_win = False
 		# check lines
 		
 		# check corners
@@ -39,7 +45,8 @@ class Vertex:
 		for corner in self.corners:
 			if self.value == -1:
 				self.value = self.data[corner:corner+2]
-			else if self.value == self.data[corner:corner+2]:
+			elif self.value == self.data[corner:corner+2]:
+				
 				
 		
 		# check sqaures
@@ -59,6 +66,7 @@ class Vertex:
 			if self.chunk in self.square_patterns:
 				return True
 		
+		return is_win
 		
 	
 	def __eq__(self, other):
