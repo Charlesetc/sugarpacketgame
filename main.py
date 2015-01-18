@@ -98,11 +98,13 @@ class Vertex:
 		piece_dict = {BitArray('0b0'):BitArray('0b01'), BitArray('0b1'):BitArray('0b10')}
 		own_piece = piece_dict[self.player]
 		legal_states = []
+		empties = [BitArray('0b00'), BitArray('0b0000'), BitArray('0b000000')]
 
 		for i in range(4):
 			row = self.board[(8*i):(8*(i+1))]
 			for j in range(4):
 				if row[(2*j):(2*(j+1))] == own_piece:
+
 
 		return BitArray('0b')
 # Transposes bitarrays that represent a grid of 4x4 two-bit cells.
