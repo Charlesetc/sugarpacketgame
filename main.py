@@ -29,7 +29,7 @@ class Vertex:
 				self.children_vertices.append(Vertex(child, self.tree))
 				self.tree.already_included.append(child)
 			else:
-				#search for this child and include it in children_vertices without initializing
+				self.children_vertices.append(self.tree.already_included_dict[child])
 		
 		# find children's win state
 		if self.player == BitArray('0b0'):
