@@ -7,18 +7,22 @@ class Vertex:
 	def __init__(self):
 		
 		self.color = self.is_winning_state()
-		if not self.color == 00:
+		if not self.color == "0b00":
 		    self.data[1:3] = self.color
+		    return
 		
-		# assuming we have list of children
-		self.children = self.get_children()
+		# setup children
+    	self.children = self.get_children()
 		
-		self.color = 0
+		# do something
+		
+		# assuming we have list of children done
+		
+		self.color = "0b0"
 		self.player = self.data[0]
 		for child in self.children:
-		    self.color = self.color or child.data[self.player+1]
-		self.data[ ] = self.color
-		    
+		    self.color = self.color[0] or child.data[self.player+1]
+		self.data[self.player+1] = self.color
     
     def is_winning_state(self):
         return 0
