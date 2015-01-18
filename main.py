@@ -25,7 +25,7 @@ class Vertex:
 		for child in self.children:
 			if not(child in self.tree.alread_included):
 				self.children_vertices.append(Vertex(child, self.tree))
-				self.tree.alread_included.append(child)
+				self.tree.already_included.append(child)
 			else:
 				#search for this child and include it in children_vertices without initializing
 		
@@ -133,7 +133,7 @@ class Vertex:
 								legal_move = next_player + BitArray('0b00') + transpose(horizontal_flip(move_noflip))
 							else:
 								legal_move = next_player + BitArray('0b00') + move_noflip
-								
+
 							legal_moves.append(legal_move)
 
 		return legal_moves
@@ -159,7 +159,7 @@ def horizontal_flip(old_array):
 class Tree:
 	def __init__(self, initial_state):
 		self.already_included = [self.initial_state]
-		self.root = Vertex(initial_state, self)
+		self.root =  Vertex(initial_state, self)
 
 if __name__ == "__main__":
 	print "Hello world!"
