@@ -29,6 +29,7 @@ class Vertex:
 		for child in self.children:
 			self.color = self.color[0] or child.data[self.player+1]
 		self.data[self.player+1] = self.color
+		self.data[(self.player+1)%2+1] = (self.color+1)%2
 	
 	def is_winning_state(self):
 		self 
