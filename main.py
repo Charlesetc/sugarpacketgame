@@ -3,7 +3,7 @@ from bitstring import *
 
 class Vertex:
 	
-	def __init__(data=BitArray('0b00000000000000000000000000000000000')):
+	def __init__(self, data=BitArray('0b00000000000000000000000000000000000'), tree):
 		# Formula: 1b Parity, 2b Win-State, 32b Board
 		
 		# setup board and player
@@ -23,7 +23,8 @@ class Vertex:
 		self.children = self.get_children()
 		self.children_vertices = []
 		for child in self.children:
-			self.children_vertices.append(Vertex(child))
+			self.children_vertices.append(Vertex(child, self.tree))
+			self.tree.already_included.append(child)
 		
 		# find children's win state
 		if self.player == BitArray('0b0'):
@@ -94,10 +95,14 @@ class Vertex:
 	
 	def get_children(self):
 		# returns the strings of all of the available child game states
+		own_piece = BitArray('0b11')
+		own_piece[self.player] = 0
+		legal_states = []
+
+		for i in range(4):
+			
+
 		return BitArray('0b')
-	
-
-
 # Transposes bitarrays that represent a grid of 4x4 two-bit cells.
 def transpose(old_array):
 	new_array = BitArray('0b00000000000000000000000000000000')
@@ -108,6 +113,12 @@ def transpose(old_array):
 			new_array[(n):(n+2)] = old_array[(m):(m+2)]
 	return new_array
 
+class Tree:
+	def __init__(self, initial_state):
+		already_included = []
+		root = Vertex(initial_state, self)
+
 if __name__ == "__main__":
 	print "Hello world!"
-	initial_state = BitArray("0b0000100000010000110000010010010000001") # i think..
+	initial_state = BitArray('0b0000100000010000110000010010010000001') # i think..
+	game_tree = Tree(initial_state)
