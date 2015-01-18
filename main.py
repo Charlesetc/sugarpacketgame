@@ -25,6 +25,7 @@ class Vertex:
 		for child in self.children:
 			if not(child in self.tree.alread_included):
 				self.children_vertices.append(Vertex(child, self.tree))
+				self.tree.alread_included.append(child)
 			else:
 				#search for this child and include it in children_vertices without initializing
 		
@@ -132,10 +133,7 @@ class Vertex:
 								legal_move = next_player + BitArray('0b00') + transpose(horizontal_flip(move_noflip))
 							else:
 								legal_move = next_player + BitArray('0b00') + move_noflip
-
-							if not(legal_move in self.tree.already_included):
-								self.tree.already_included.append(legal_move)
-
+								
 							legal_moves.append(legal_move)
 
 		return legal_moves
