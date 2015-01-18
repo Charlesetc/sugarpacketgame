@@ -118,7 +118,7 @@ class Vertex:
 						if blanks_right != 0:
 							sub_move_in_row = BitArray('0b00')*blanks_right + own_piece
 							move_in_row = row
-							move_in_row[(2*j):(2*blanks_right)] = sub_move_in_row
+							move_in_row[(2*j):(2*(j+blanks_right))] = sub_move_in_row
 							move_noflip = way
 							move_noflip[(8*i):(8*(i+1))] = move_in_row
 
@@ -157,7 +157,7 @@ def horizontal_flip(old_array):
 
 class Tree:
 	def __init__(self, initial_state):
-		self.already_included = []
+		self.already_included = [self.initial_state]
 		self.root = Vertex(initial_state, self)
 
 if __name__ == "__main__":
