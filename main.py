@@ -101,8 +101,9 @@ class Vertex:
 	def get_children(self):
 		# returns the strings of all of the available child game states
 		piece_dict = {BitArray('0b0'):BitArray('0b01'), BitArray('0b1'):BitArray('0b10')}
+		other_player = {BitArray('0b10'):BitArray('0b01'), BitArray('0b01'):BitArray('0b10')}
 		own_piece = piece_dict[self.player]
-		next_player = self.player and True
+		next_player = other_player[self.player]
 		legal_moves = []
 		empties = [BitArray('0b00'), BitArray('0b0000'), BitArray('0b000000')]
 		four_ways = [self.board, transpose(self.board), horizontal_flip(self.board), horizontal_flip(transpose(self.board))]
@@ -116,25 +117,26 @@ class Vertex:
 						blanks_right = 0
 						right_move = None
 
-						for k in range(4-j): #going to the right
+						for k in range(3-j): #going to the right
 							if row[(2*(j+1)):(2*(j+1+k))] in empties:
 								blanks_right = k+1
+								blanks = row[(2*(j+1)):(2*(j+1+k))]
 
 						if blanks_right != 0:
-							sub_move_in_row = BitArray('0b00')*blanks_right + own_piece
+							sub_move_in_row = blanks.append(own_piece)
 							move_in_row = row
 							move_in_row[(2*j):(2*(j+blanks_right))] = sub_move_in_row
 							move_noflip = way
 							move_noflip[(8*i):(8*(i+1))] = move_in_row
 
 							if way == transpose(self.board):
-								legal_move = next_player + BitArray('0b00') + transpose(move_noflip)
+								legal_move = next_player.append(BitArray('0b00').append(transpose(move_noflip)))
 							elif way == horizontal_flip(self.board):
-								legal_move = next_player + BitArray('0b00') + horizontal_flip(move_noflip)
+								legal_move = next_player.append(BitArray('0b00').append(horizontal_flip(move_noflip)))
 							elif way == horizontal_flip(transpose(self.board)):
-								legal_move = next_player + BitArray('0b00') + transpose(horizontal_flip(move_noflip))
+								legal_move = next_player.append(BitArray('0b00').append(transpose(horizontal_flip(move_noflip))))
 							else:
-								legal_move = next_player + BitArray('0b00') + move_noflip
+								legal_move = next_player.append(BitArray('0b00').append(move_noflip))
 
 							legal_moves.append(legal_move)
 
@@ -154,7 +156,7 @@ def horizontal_flip(old_array):
 	for i in range(4):
 		for j in range(4):
 			n = (j * 4 + i) * 2
-			m = (j * 4 + 4-i) * 2
+			m = (j * 4 + 3-i) * 2
 			new_array[(n):(n+2)] = old_array[(m):(m+2)]
 	return new_array
 
