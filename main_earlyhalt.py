@@ -43,7 +43,7 @@ class Vertex:
 					return
 
 				if not(self.player) and (tree.already_included_dict[child.bin].color ==  BitArray('0b10')):#
-					self.color = BitArray('0b01')
+					self.color = BitArray('0b10')
 					return
 
 		
