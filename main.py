@@ -22,9 +22,9 @@ class Vertex:
 		# deal with terminal condition
 		if self.is_terminal_state():
 			if self.player:
-				self.color = BitArray('0b01') #if it's your turn to move and the game is over, you lose
+				self.color = BitArray('0b10') #if it's your turn to move and the game is over, you lose
 			else:
-				self.color = BitArray('0b10')
+				self.color = BitArray('0b01')
 			return
 		
 		# initialize children
@@ -197,7 +197,7 @@ def visual_row(array):
 
 class Tree:
 	def __init__(self, initial_state):
-		player_dict = {'10':"Player 2!", '01':"Player 1!"}
+		player_dict = {'10':"Player 1!", '01':"Player 2!"}
 		self.already_included = [initial_state]
 		self.already_included_dict = {}
 		self.root =  Vertex(initial_state, self)
