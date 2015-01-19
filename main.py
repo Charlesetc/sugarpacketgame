@@ -11,7 +11,7 @@ class Vertex:
 		self.color = self.data[1:3]
 		self.board = self.data[3:]
 
-		self.tree.already_included_dict[self.data.uint] = self
+		tree.already_included_dict[self.data.bin] = self
 		
 		# deal with terminal condition
 		if self.is_terminal_state():
@@ -25,11 +25,11 @@ class Vertex:
 		self.children = self.get_children()
 		self.children_vertices = []
 		for child in self.children:
-			if not(child in self.tree.already_included):
+			if not(child in tree.already_included):
 				self.children_vertices.append(Vertex(child, tree))
-				self.tree.already_included.append(child)
+				tree.already_included.append(child)
 			else:
-				self.children_vertices.append(self.tree.already_included_dict[child.uint])
+				self.children_vertices.append(self.tree.already_included_dict[child.bin])
 		
 		# find children's win state
 		if self.player == BitArray('0b0'):
@@ -113,7 +113,6 @@ class Vertex:
 					if row[(2*j):(2*(j+1))] == own_piece:
 
 						blanks_right = 0
-						right_move = None
 
 						for k in range(4-j): #going to the right
 							if row[(2*(j+1)):(2*(j+1+k))] in empties:
@@ -127,6 +126,8 @@ class Vertex:
 							move_noflip = way
 							move_noflip[(8*i):(8*(i+1))] = move_in_row
 
+							print move_noflip
+
 							if way == transpose(self.board):
 								legal_move = next_player.append(BitArray('0b00').append(transpose(move_noflip)))
 							elif way == horizontal_flip(self.board):
@@ -137,6 +138,7 @@ class Vertex:
 								legal_move = next_player.append(BitArray('0b00').append(move_noflip))
 
 							legal_moves.append(legal_move)
+							print legal_move
 
 		return legal_moves
 # Transposes bitarrays that represent a grid of 4x4 two-bit cells.
