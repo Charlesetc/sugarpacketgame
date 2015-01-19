@@ -6,6 +6,7 @@ class Vertex:
 	def __init__(self, data, tree):
 		# Formula: 1b Parity, 2b Win-State, 32b Board
 		self.data = data
+
 		# setup board and player
 		self.player = self.data[0]
 		self.color = self.data[1:3]
@@ -105,7 +106,6 @@ class Vertex:
 		legal_moves = []
 		empties = [BitArray('0b00'), BitArray('0b0000'), BitArray('0b000000')]
 		four_ways = [self.board, transpose(self.board), horizontal_flip(self.board), horizontal_flip(transpose(self.board))]
-
 		for way in four_ways:
 			for i in range(4):
 				row = way[(8*i):(8*(i+1))]
@@ -125,9 +125,10 @@ class Vertex:
 							move_in_row = row
 							move_in_row[(2*j):(2*(j+blanks_right))] = sub_move_in_row
 							move_noflip = way
+							visual_board(way)
 							move_noflip[(8*i):(8*(i+1))] = move_in_row
 
-							legal_move = BitArray('0b00000000000000000000000000000000')
+							legal_move = BitArray('0b00000000000000000000000000000000000')
 							legal_move[0:1] = next_player
 
 							if way == transpose(self.board):
@@ -161,6 +162,16 @@ def horizontal_flip(old_array):
 			new_array[(n):(n+2)] = old_array[(m):(m+2)]
 	return new_array
 
+def visual_board(array):
+	icon_dict = {'00':'_', '01':'X', '10':'0', '11':'E'}
+	for i in range(4):
+		line = ""
+		for j in range(4):
+			n = (j * 4 + i) * 2
+			icon = icon_dict[array[(n):(n+2)].bin]
+			line = line + icon
+		print line
+
 class Tree:
 	def __init__(self, initial_state):
 		self.already_included = [initial_state]
@@ -169,5 +180,5 @@ class Tree:
 
 if __name__ == "__main__":
 	print "Hello world!"
-	initial_state = BitArray('0b0000100000010000110000010010010000001') # i think..
+	initial_state = BitArray('0b00001000010000110000010010010000001') # i think..
 	game_tree = Tree(initial_state)
