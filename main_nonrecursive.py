@@ -10,9 +10,7 @@ class Vertex:
 		self.children = []
 	
 	def __eq__(self, other):
-		return self.player == other.player and 
-				self.color == other.color and
-				self.board == other.board
+		return self.player == other.player and self.color == other.color and self.board == other.board
 	
 	def __ne__(self, other):
 		return not self == other
@@ -29,21 +27,27 @@ class Tree:
 		while self.unexplored_vertices:
 			self.current_vertex = self.unexplored_vertices.pop()
 			
-			if is_terminal_vertex(current_vertex):
+			if is_terminal_vertex(self.current_vertex):
 				if self.current_vertex.player:
 					self.current_vertex.color = BitArray('0b10')
 				else:
 					self.current_vertex.color = BitArray('0b01')
 				continue
 			
-			self.data = self.player+self.color+self.board
-			self.explored_pairs.extend({self.data : self.current_vertex})
+			self.data = self.current_vertex.player+self.current_vertex.color+self.current_vertex.board
+			self.explored_pairs.update({str(self.data) : self.current_vertex})
 			
-			self.children = get_children(self.current_vertex)
+			self.children_states = get_children(self.current_vertex)
+			self.children = []
+			
+			# bit of a hack, here
+			for child in self.children_states:
+				self.children.append(Vertex(child[0], child[1:3], child[4:]))
+			
 			for child in self.children:
 				self.child_data = child.player+child.color+child.board
 				try:
-					self.current_vertex.children.append(self.explored_pairs[child_data])
+					self.current_vertex.children.append(self.explored_pairs[str(self.child_data)])
 				except KeyError:
 					self.unexplored_vertices.append(child)
 					self.current_vertex.children.append(child)
@@ -79,16 +83,16 @@ def is_terminal_vertex(vertex):
 	# check lines
 	
 	# check corners
-	vertex.luc = vertex.data[3:5]
-	vertex.ruc = vertex.data[9:11]
-	vertex.llc = vertex.data[27:29]
-	vertex.rlc = vertex.data[33:35]
+	vertex.luc = vertex.board[0:2]
+	vertex.ruc = vertex.board[6:8]
+	vertex.llc = vertex.board[22:24]
+	vertex.rlc = vertex.board[30:32]
 	if not(vertex.luc == BitArray("0b00")):
 			if (vertex.luc == vertex.ruc) and (vertex.luc == vertex.llc) and (vertex.luc == vertex.rlc):
 				return True
 	
 	# check squares
-	vertex.square_starts = [3, 5, 7, 11, 13, 15, 19, 21, 23]
+	vertex.square_starts = [0, 2, 4, 8, 10, 12, 16, 18, 20]
 	vertex.square_patterns = [
 							BitArray('0b010100000101'),
 							BitArray('0b010110000101'),
@@ -101,7 +105,7 @@ def is_terminal_vertex(vertex):
 							]
 	
 	for bit in vertex.square_starts:
-		vertex.chunk = vertex.data[bit:bit+12]
+		vertex.chunk = vertex.board[bit:bit+12]
 		if vertex.chunk in vertex.square_patterns:
 			return True
 	
@@ -114,8 +118,8 @@ def get_children(vertex):
 	# returns the strings of all of the available child game states
 	piece_dict = {False:BitArray('0b01'), True:BitArray('0b10')}
 	other_player = {True:BitArray('0b0'), False:BitArray('0b1')}
-	own_piece = piece_dict[vertex.player]
-	next_player = other_player[vertex.player]
+	own_piece = piece_dict[bool(vertex.player)]
+	next_player = other_player[bool(vertex.player)]
 	legal_moves = []
 	empties = [BitArray('0b00'), BitArray('0b0000'), BitArray('0b000000')]
 	four_ways_dict = {0:vertex.board, 1:transpose(vertex.board), 2:horizontal_flip(vertex.board), 3:horizontal_flip(transpose(vertex.board))}
