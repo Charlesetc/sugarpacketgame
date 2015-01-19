@@ -22,9 +22,9 @@ class Vertex:
 		# deal with terminal condition
 		if self.is_terminal_state():
 			if self.player:
-				self.color = BitArray('0b10')
+				self.color = BitArray('0b01') #if it's your turn to move and the game is over, you lose
 			else:
-				self.color = BitArray('0b01')
+				self.color = BitArray('0b10')
 			return
 		
 		# initialize children
