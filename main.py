@@ -101,7 +101,7 @@ class Vertex:
 	def get_children(self):
 		# returns the strings of all of the available child game states
 		piece_dict = {BitArray('0b0'):BitArray('0b01'), BitArray('0b1'):BitArray('0b10')}
-		other_player = {BitArray('0b10'):BitArray('0b01'), BitArray('0b01'):BitArray('0b10')}
+		other_player = {BitArray('0b1'):BitArray('0b0'), BitArray('0b0'):BitArray('0b1')}
 		own_piece = piece_dict[self.player]
 		next_player = other_player[self.player]
 		legal_moves = []
