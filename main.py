@@ -107,9 +107,9 @@ class Vertex:
 		legal_moves = []
 		empties = [BitArray('0b00'), BitArray('0b0000'), BitArray('0b000000')]
 		four_ways_dict = {0:self.board, 1:transpose(self.board), 2:horizontal_flip(self.board), 3:horizontal_flip(transpose(self.board))}
-		#visual_board(self.board)
-		#visual_board(horizontal_flip(self.board))
-		#print "******************"
+		print "********STARTING*********"
+		visual_board(self.board)
+		print "........................."
 		for l in range(4):
 			way = deepcopy(four_ways_dict[l])
 			for i in range(4):
@@ -120,31 +120,19 @@ class Vertex:
 						blanks_right = 0
 
 						for k in range(3-j): #going to the right
-							#visual_board(way)
-							#print row[(2*(j+1)):(2*(j+2+k))].bin
-							#print (BitArray('0b00')*(k+1)).bin
+
 							if row[(2*(j+1)):(2*(j+2+k))] == BitArray('0b00')*(k+1):
 								blanks_right = k+1
 								blanks = row[(2*(j+1)):(2*(j+1+k))]
 
-							#print "blanks right", blanks_right
-
 						if blanks_right != 0:
-							#print "yes move"
-							#visual_board(way)
 							sub_move_in_row = BitArray('0b00')*(blanks_right+1)
 							sub_move_in_row[-2:] = deepcopy(own_piece)
-							#print sub_move_in_row.bin
 							move_in_row = deepcopy(row)
-							#print row[(2*j):(2*(j+blanks_right+1))].bin
 							move_in_row[(2*j):(2*(j+blanks_right+1))] = deepcopy(sub_move_in_row)
 							move_noflip = deepcopy(way)
 							move_noflip[(8*i):(8*(i+1))] = deepcopy(move_in_row)
-							#visual_row(row)
-							#visual_row(move_in_row)
-							#visual_board(way)
-							#visual_board(move_noflip)
-							#print "*********************"
+
 							legal_move = BitArray('0b00000000000000000000000000000000000')
 							legal_move[0:1] = deepcopy(next_player)
 
