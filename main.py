@@ -117,7 +117,7 @@ class Vertex:
 						blanks_right = 0
 						right_move = None
 
-						for k in range(3-j): #going to the right
+						for k in range(4-j): #going to the right
 							if row[(2*(j+1)):(2*(j+1+k))] in empties:
 								blanks_right = k+1
 								blanks = row[(2*(j+1)):(2*(j+1+k))]
@@ -156,7 +156,7 @@ def horizontal_flip(old_array):
 	for i in range(4):
 		for j in range(4):
 			n = (j * 4 + i) * 2
-			m = (j * 4 + 3-i) * 2
+			m = (j * 4 + (-i)%4) * 2
 			new_array[(n):(n+2)] = old_array[(m):(m+2)]
 	return new_array
 
