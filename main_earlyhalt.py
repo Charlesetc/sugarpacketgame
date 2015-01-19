@@ -219,6 +219,7 @@ if __name__ == "__main__":
 	#initial_state = BitArray('0b00001000010000110000010010010000001') # i think..
 	#initial_state = BitArray('0b00001010101000000000010000010001010') #(player 2 win)
 	#initial_state = BitArray('0b00001101001100000101000100101101000') #(player 1 win)
-	initial_state = BitArray('0b00000100001001000010010000110000100') #(earlyhalt test, player 1 win)
+	#initial_state = BitArray('0b00000100001001000010010000110000100') #(earlyhalt test, player 1 win)
+	initial_state = BitArray('0b000 00011010010000100001101001101000') #(earlyhalt test, player 1 win)
 	game_tree = Tree(initial_state)
 	print game_tree.winner
