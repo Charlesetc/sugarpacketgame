@@ -3,15 +3,16 @@ from bitstring import *
 
 class Vertex:
 	
-	def __init__(self, data=BitArray('0b00000000000000000000000000000000000'), tree):
+	def __init__(self, data, tree):
 		# Formula: 1b Parity, 2b Win-State, 32b Board
-		
+		self.data = data
+		self.tree = tree
 		# setup board and player
 		self.player = self.data[0]
 		self.color = self.data[1:3]
 		self.board = self.data[3:]
 
-		self.tree.already_included_dict[self.data] = self
+		self.tree.already_included_dict[self.data.uint] = self
 		
 		# deal with terminal condition
 		if self.is_terminal_state():
@@ -29,7 +30,7 @@ class Vertex:
 				self.children_vertices.append(Vertex(child, self.tree))
 				self.tree.already_included.append(child)
 			else:
-				self.children_vertices.append(self.tree.already_included_dict[child])
+				self.children_vertices.append(self.tree.already_included_dict[child.uint])
 		
 		# find children's win state
 		if self.player == BitArray('0b0'):
@@ -60,11 +61,9 @@ class Vertex:
 		self.ruc = self.data[9:11]
 		self.llc = self.data[27:29]
 		self.rlc = self.data[33:35]
-		if not self.luc == BitArray("0b00")
-				self.luc == self.ruc and
-				self.luc == self.llc and
-				self.luc == self.rlc:
-			return True
+		if not(self.luc == BitArray("0b00")):
+				if (self.luc == self.ruc) and (self.luc == self.llc) and (self.luc == self.rlc):
+					return True
 		
 		# check squares
 		self.square_starts = [3, 5, 7, 11, 13, 15, 19, 21, 23]
@@ -162,7 +161,7 @@ def horizontal_flip(old_array):
 
 class Tree:
 	def __init__(self, initial_state):
-		self.already_included = [self.initial_state]
+		self.already_included = [initial_state]
 		self.already_included_dict = {}
 		self.root =  Vertex(initial_state, self)
 
