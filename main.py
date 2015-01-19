@@ -130,7 +130,7 @@ class Vertex:
 							#print "blanks right", blanks_right
 
 						if blanks_right != 0:
-							print "yes move"
+							#print "yes move"
 							#visual_board(way)
 							sub_move_in_row = BitArray('0b00')*(blanks_right+1)
 							sub_move_in_row[-2:] = deepcopy(own_piece)
@@ -144,19 +144,19 @@ class Vertex:
 							#visual_row(move_in_row)
 							#visual_board(way)
 							#visual_board(move_noflip)
-							print "*********************"
+							#print "*********************"
 							legal_move = BitArray('0b00000000000000000000000000000000000')
-							legal_move[0:1] = next_player
+							legal_move[0:1] = deepcopy(next_player)
 
 							if l == 1:
-								legal_move[3:] = transpose(move_noflip)
+								legal_move[3:] = deepcopy(transpose(move_noflip))
 							elif l == 2:
-								legal_move[3:] = horizontal_flip(move_noflip)
+								legal_move[3:] = deepcopy(horizontal_flip(move_noflip))
 							elif l == 3:
-								legal_move[3:] = transpose(horizontal_flip(move_noflip))
+								legal_move[3:] = deepcopy(transpose(horizontal_flip(move_noflip)))
 							else:
-								legal_move[3:] = move_noflip
-
+								legal_move[3:] = deepcopy(move_noflip)
+							visual_board(legal_move[3:])
 							legal_moves.append(legal_move)
 
 		return legal_moves
@@ -175,7 +175,7 @@ def horizontal_flip(old_array):
 	for i in range(4):
 		for j in range(4):
 			n = (j * 4 + i) * 2
-			m = ((-1-j)%4 * 4 + i) * 2
+			m = (j * 4 + (-1-i)%4) * 2
 			new_array[(n):(n+2)] = old_array[(m):(m+2)]
 	return new_array
 
