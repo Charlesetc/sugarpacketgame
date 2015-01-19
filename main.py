@@ -206,6 +206,7 @@ class Tree:
 if __name__ == "__main__":
 	print "And the winner is..."
 	initial_state = BitArray('0b00001000010000110000010010010000001') # i think..
-	#initial_state = BitArray('0b00001010101000000000010000010001010')
+	#initial_state = BitArray('0b00001010101000000000010000010001010') #(player 2 win)
+	#initial_state = BitArray('0b00001101001100000101000100101101000') #(player 1 win)
 	game_tree = Tree(initial_state)
 	print game_tree.winner
