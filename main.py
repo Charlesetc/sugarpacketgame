@@ -156,7 +156,7 @@ def horizontal_flip(old_array):
 	for i in range(4):
 		for j in range(4):
 			n = (j * 4 + i) * 2
-			m = (j * 4 + (-i)%4) * 2
+			m = (j * 4 + (-1-i)%4) * 2
 			new_array[(n):(n+2)] = old_array[(m):(m+2)]
 	return new_array
 
