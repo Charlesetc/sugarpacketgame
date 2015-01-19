@@ -120,24 +120,28 @@ class Vertex:
 								blanks = row[(2*(j+1)):(2*(j+1+k))]
 
 						if blanks_right != 0:
-							sub_move_in_row = blanks.append(own_piece)
+							sub_move_in_row = BitArray('0b00')*(blanks_right+1)
+							sub_move_in_row[-2:] = own_piece
 							move_in_row = row
 							move_in_row[(2*j):(2*(j+blanks_right))] = sub_move_in_row
 							move_noflip = way
 							move_noflip[(8*i):(8*(i+1))] = move_in_row
 
 							print move_noflip
+							legal_move = BitArray('0b00000000000000000000000000000000')
+							legal_move[0:1] = next_player
 
 							if way == transpose(self.board):
-								legal_move = next_player.append(BitArray('0b00').append(transpose(move_noflip)))
+								legal_move[3:] = transpose(move_noflip)
 							elif way == horizontal_flip(self.board):
-								legal_move = next_player.append(BitArray('0b00').append(horizontal_flip(move_noflip)))
+								legal_move[3:] = horizontal_flip(move_noflip)
 							elif way == horizontal_flip(transpose(self.board)):
-								legal_move = next_player.append(BitArray('0b00').append(transpose(horizontal_flip(move_noflip))))
+								legal_move[3:] = transpose(horizontal_flip(move_noflip))
 							else:
-								legal_move = next_player.append(BitArray('0b00').append(move_noflip))
+								legal_move[3:] = move_noflip
 
 							legal_moves.append(legal_move)
+
 							print legal_move
 
 		return legal_moves
