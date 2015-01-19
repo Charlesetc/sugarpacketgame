@@ -1,6 +1,10 @@
 # The Main Model of the Sugar Packet Game.
 from bitstring import *
 from copy import *
+import sys
+import resource
+resource.setrlimit(resource.RLIMIT_STACK, (2**29,-1))
+sys.setrecursionlimit(10**6) #heheheh
 
 class Vertex:
 	
@@ -56,7 +60,12 @@ class Vertex:
 	def is_terminal_state(self):
 		
 		# check lines
-		
+		two_ways = [self.board, transpose(self.board)]
+		for way in two_ways:
+			for i in range(4):
+				row = way[(8*i):(8*(i+1))]
+				if (row == BitArray('0b01')*4) or (row == BitArray('0b01')*4):
+					return True
 		# check corners
 		self.luc = self.data[3:5]
 		self.ruc = self.data[9:11]
@@ -107,9 +116,9 @@ class Vertex:
 		legal_moves = []
 		empties = [BitArray('0b00'), BitArray('0b0000'), BitArray('0b000000')]
 		four_ways_dict = {0:self.board, 1:transpose(self.board), 2:horizontal_flip(self.board), 3:horizontal_flip(transpose(self.board))}
-		print "********STARTING*********"
-		visual_board(self.board)
-		print "........................."
+		#print "********STARTING*********"
+		#visual_board(self.board)
+		#print "........................."
 		for l in range(4):
 			way = deepcopy(four_ways_dict[l])
 			for i in range(4):
@@ -144,7 +153,7 @@ class Vertex:
 								legal_move[3:] = deepcopy(transpose(horizontal_flip(move_noflip)))
 							else:
 								legal_move[3:] = deepcopy(move_noflip)
-							visual_board(legal_move[3:])
+							#visual_board(legal_move[3:])
 							legal_moves.append(legal_move)
 
 		return legal_moves
@@ -188,11 +197,15 @@ def visual_row(array):
 
 class Tree:
 	def __init__(self, initial_state):
+		player_dict = {False:"Player 2!", True:"Player 1!"}
 		self.already_included = [initial_state]
 		self.already_included_dict = {}
 		self.root =  Vertex(initial_state, self)
+		self.winner = player_dict[self.root.data[0]]
 
 if __name__ == "__main__":
-	print "Hello world!"
+	print "And the winner is..."
 	initial_state = BitArray('0b00001000010000110000010010010000001') # i think..
+	#initial_state = BitArray('0b00001010101000000000010000010001010')
 	game_tree = Tree(initial_state)
+	print game_tree.winner
