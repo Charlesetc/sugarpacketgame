@@ -6,7 +6,6 @@ class Vertex:
 	def __init__(self, data, tree):
 		# Formula: 1b Parity, 2b Win-State, 32b Board
 		self.data = data
-		self.tree = tree
 		# setup board and player
 		self.player = self.data[0]
 		self.color = self.data[1:3]
@@ -27,7 +26,7 @@ class Vertex:
 		self.children_vertices = []
 		for child in self.children:
 			if not(child in self.tree.already_included):
-				self.children_vertices.append(Vertex(child, self.tree))
+				self.children_vertices.append(Vertex(child, tree))
 				self.tree.already_included.append(child)
 			else:
 				self.children_vertices.append(self.tree.already_included_dict[child.uint])
@@ -99,8 +98,8 @@ class Vertex:
 	
 	def get_children(self):
 		# returns the strings of all of the available child game states
-		piece_dict = {BitArray('0b0'):BitArray('0b01'), BitArray('0b1'):BitArray('0b10')}
-		other_player = {BitArray('0b1'):BitArray('0b0'), BitArray('0b0'):BitArray('0b1')}
+		piece_dict = {False:BitArray('0b01'), True:BitArray('0b10')}
+		other_player = {True:BitArray('0b0'), False:BitArray('0b1')}
 		own_piece = piece_dict[self.player]
 		next_player = other_player[self.player]
 		legal_moves = []
