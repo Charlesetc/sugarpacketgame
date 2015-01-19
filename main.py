@@ -197,11 +197,11 @@ def visual_row(array):
 
 class Tree:
 	def __init__(self, initial_state):
-		player_dict = {False:"Player 2!", True:"Player 1!"}
+		player_dict = {'10':"Player 2!", '01':"Player 1!"}
 		self.already_included = [initial_state]
 		self.already_included_dict = {}
 		self.root =  Vertex(initial_state, self)
-		self.winner = player_dict[self.root.data[0]]
+		self.winner = player_dict[self.root.color.bin]
 
 if __name__ == "__main__":
 	print "And the winner is..."
