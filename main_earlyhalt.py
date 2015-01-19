@@ -2,8 +2,8 @@
 from bitstring import *
 from copy import *
 import sys
-import resource
-resource.setrlimit(resource.RLIMIT_STACK, (2**29,-1))
+#import resource
+#resource.setrlimit(resource.RLIMIT_STACK, (2**29,-1))
 sys.setrecursionlimit(10**6) #heheheh
 
 class Vertex:
@@ -27,6 +27,7 @@ class Vertex:
 				self.color = BitArray('0b01')
 			return
 		
+		visual_board(self.board)
 		# initialize children
 		self.children = self.get_children()
 		self.children_vertices = []
@@ -215,8 +216,9 @@ class Tree:
 
 if __name__ == "__main__":
 	print "And the winner is..."
-	initial_state = BitArray('0b00001000010000110000010010010000001') # i think..
+	#initial_state = BitArray('0b00001000010000110000010010010000001') # i think..
 	#initial_state = BitArray('0b00001010101000000000010000010001010') #(player 2 win)
 	#initial_state = BitArray('0b00001101001100000101000100101101000') #(player 1 win)
+	initial_state = BitArray('0b00000100001001000010010000110000100') #(earlyhalt test, player 1 win)
 	game_tree = Tree(initial_state)
 	print game_tree.winner
