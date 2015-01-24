@@ -25,12 +25,13 @@ class Tree:
 			
 		os.makedirs(self.dict_dir)
 		self.init_dictionaries()
+		self.color_entries()
 
 	def init_dictionaries(self):
 		index = 0
 		cur_dict = {}
 		truth_dict = {0:False, 1:True}
-		all_pieces = ([BitArray('0b00')]*8) + ([BitArray('0b10')]*4) + ([BitArray('0b01')]*4)
+		all_pieces = ([BitArray('0b00')]*8) + ([BitArray('0b01')]*4) + ([BitArray('0b10')]*4)
 
 		for order in itertools.permutations(all_pieces):
 
@@ -41,8 +42,6 @@ class Tree:
 					new_state = BitArray('0b100000000000000000000000000000000')
 				for i in range(16):
 					new_state[(1+2*i):(1+2*(i+1))] = order[i]
-
-				print visual_board(new_state[1:])
 
 				if is_terminal_board(new_state[1:]):
 					if player_n == 0: #player 1's turn
@@ -58,7 +57,13 @@ class Tree:
 					pickle.dump(cur_dict, open(pickleloc, "wb"))
 					cur_dict = {}
 
-			#if index == self.interval:
+	def color_entries(self):
+		root_uncolored = True
+		while root_uncolored:
+
+			root_uncolored = False
+			#idk how the lookup is going to work yet
+
 
 def get_children(state):
 	# returns the strings of all of the available child game states
@@ -112,7 +117,7 @@ def get_children(state):
 
 	return legal_moves
 
-def is_legal_board(board):
+def is_legal_board(board): #debugging thing
 
 	player1_count = 0
 	player2_count = 0
@@ -212,7 +217,7 @@ if __name__ == "__main__":
 	initial_state = BitArray('0b001000010000110000010010010000001') # i think..
 	#initial_state = BitArray('0b001010101000000000010000010001010') #(player 2 win)
 	#initial_state = BitArray('0b001101001100000101000100101101000') #(player 1 win)
-	tree = Tree(initial_state, 100000)
+	tree = Tree(initial_state, 1000)
 
 	# def init_dictionaries(self):
 
