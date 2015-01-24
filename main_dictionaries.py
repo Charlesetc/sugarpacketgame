@@ -13,8 +13,10 @@ import itertools
 class Tree:
 
 	def __init__(self, initial_state, interval):
+		self.dict_names = []
+		self.dict_limits = []
 		self.initial_state = initial_state
-		self.dict_num = ((1000000) // interval) + 1
+		#self.dict_num = ((1000000) // interval) + 1
 		self.interval = interval
 
 		own_dir = os.path.dirname(__file__)
@@ -25,6 +27,10 @@ class Tree:
 			
 		os.makedirs(self.dict_dir)
 		self.init_dictionaries()
+
+		for name in self.dict_names:
+			self.dict_limits.append(int(name[1:]))
+
 		self.color_entries()
 
 	def init_dictionaries(self):
@@ -45,25 +51,53 @@ class Tree:
 
 				if is_terminal_board(new_state[1:]):
 					if player_n == 0: #player 1's turn
-						cur_dict[index] = [BitArray('0b01')] #player 2 wins
+						cur_dict[new_state.bin] = [BitArray('0b01')] #player 2 wins
 					else:
-						cur_dict[index] = [BitArray('0b10')] #player 1 wins
+						cur_dict[new_state.bin] = [BitArray('0b10')] #player 1 wins
 				else:
-					cur_dict[index] = [BitArray('0b00')] + get_children(new_state)#undecided
+					cur_dict[new_state.bin] = [BitArray('0b00')] + get_children(new_state)#undecided
 
 				index = index + 1
 				if index % self.interval == 0:
-					pickleloc = os.path.join(self.dict_dir, str(index) + ".p")
+					pickleloc = os.path.join(self.dict_dir, new_state.bin + ".p")
 					pickle.dump(cur_dict, open(pickleloc, "wb"))
+					self.dict_names.append(new_state.bin)
 					cur_dict = {}
 
 	def color_entries(self):
 		root_uncolored = True
 		while root_uncolored:
 
-			root_uncolored = False
-			#idk how the lookup is going to work yet
+			for dict_name in self.dict_names:
+				pickleloc = os.path.join(self.dict_dir, dict_name + ".p")
+				cur_dict = pickle.load(open(pickleloc, "rb"))
 
+				for state_str in cur_dict:
+
+					if cur_dict[state_str][0] != BitArray('0b00'):
+
+						if state_str == self.initial_state.bin:
+							root_uncolored = False
+							return
+
+					else: #still needs to be colored
+
+						child_colors = []
+
+						for child_state in cur_dict[state_str][1:]: #need to find child's dictionary
+							childs_dict = {}
+							for i in range(len(self.dict_limits)):
+								if int((child_state.bin)[1:]) > self.dict_limits[i]:
+									childs_dict_index = i-1
+									break
+
+							childs_dict_name = self.dict_names[childs_dict_index]
+							pickleloc = os.path.join(self.dict_dir, childs_dict_name + ".p")
+							childs_dict = deepcopy(pickle.load(open(pickleloc, "rb")))
+							child_colors.append(childs_dict[child_state.bin][0])
+
+						if (BitArray('0b10') in child_colors) or (BitArray('0b01') in child_colors): #i.e. children have been colored
+							bum = True #coloring goes here :P
 
 def get_children(state):
 	# returns the strings of all of the available child game states
